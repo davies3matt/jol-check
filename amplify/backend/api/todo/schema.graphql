@@ -1,0 +1,14 @@
+type Todo @model @auth(rules: [{allow: public, operations: [create, read, update, delete]}]) {
+  id: ID!
+  label: String
+  description: String
+  checked: Boolean
+  Users: [User] @manyToMany(relationName: "TodoUser")
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: String
+  todos: [Todo] @manyToMany(relationName: "TodoUser")
+}
