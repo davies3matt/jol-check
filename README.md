@@ -1,6 +1,14 @@
 # jol-check
 A multi-user To-Do/Check list tracker app 
 
+# Getting Started
+
+After cloning the repo run `amplify init` using IAM credentials to authenticate
+
+run `amplify codegen` to generate types, queries, mutations and subscriptions
+
+Finally run `yarn start` to launch the Expo Environment 
+
 # Frontend
 
 The frontend is built on the Expo framework, which is built around React Native.

@@ -13,6 +13,11 @@ web-build/
 # macOS
 .DS_Store
 
+# Generated Files
+src/generated.ts
+src/models
+src/graphql
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
