@@ -14,7 +14,6 @@ web-build/
 .DS_Store
 
 # Generated Files
-src/generated.ts
 src/models
 src/graphql
 
