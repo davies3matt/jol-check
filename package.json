@@ -10,19 +10,34 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.6",
+    "@graphql-codegen/typescript": "^2.4.2",
+    "@graphql-codegen/typescript-operations": "^2.2.2",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.3",
+    "@react-native-async-storage/async-storage": "^1.15.14",
+    "@react-native-community/netinfo": "^7.1.7",
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
     "apollo-client": "^2.6.10",
     "aws-amplify": "^4.3.11",
     "expo": "~43.0.2",
     "expo-status-bar": "~1.1.0",
+    "native-base": "^3.3.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "~3.8.0",
+    "react-native-svg": "12.1.1",
+    "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@graphql-codegen/cli": "^2.3.1",
     "@types/react": "~17.0.21",
-    "@types/react-native": "~0.64.12",
+    "@types/react-loadable": "^5.5.6",
+    "@types/react-native": "^0.64.5",
     "typescript": "~4.3.5"
   },
   "private": true
