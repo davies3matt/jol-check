@@ -1,38 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import Amplify from 'aws-amplify';
+import { NativeBaseProvider } from 'native-base';
 import awsconfig from './src/aws-exports';
-import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 /** Graphql */
 import { createUser } from './src/graphql/mutations'
 import { listUsers } from './src/graphql/queries';
+import Home from './src/containers/Home';
+import Login from './src/containers/Authentication/Login';
+import SignUp from './src/containers/Authentication/SignUp';
+
 
 Amplify.configure(awsconfig);
 
-const myUser = { name: 'Matt', email: 'mdldavies@gmail.com' };
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <button onClick={async () => {
-        await API.graphql(graphqlOperation(createUser, {input: myUser}))
-      }}>Click Me</button>
-      <button onClick={async () => {
-        const data = await API.graphql(graphqlOperation(listUsers));
-        console.log(data);
-      }}>Me Get!</button>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <NativeBaseProvider>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ title: 'Home' }}
+        />
+      </Stack.Navigator>
+      </NativeBaseProvider>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;
