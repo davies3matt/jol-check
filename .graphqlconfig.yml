@@ -1,18 +1,14 @@
 projects:
   todo:
-    schemaPath: amplify/backend/api/todo/build/schema.graphql
+    schemaPath: src/graphql/schema.json
     includes:
-      - src/graphql/**/*.ts
+      - src/graphql/**/*.graphql
     excludes:
       - ./amplify/**
     extensions:
       amplify:
-        codeGenTarget: typescript
-        generatedFileName: src/generated.ts
         docsFilePath: src/graphql
-        region: eu-west-1
-        apiId: null
-        maxDepth: 2
+        maxDepth: 5
 extensions:
   amplify:
     version: 3
