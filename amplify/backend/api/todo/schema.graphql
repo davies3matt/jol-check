@@ -1,3 +1,11 @@
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: String
+  todos: [Todo] @manyToMany(relationName: "TodoUser")
+  jols: [Jol] @manyToMany(relationName: "JolUser")
+}
+
 type Todo @model @auth(rules: [{allow: public, operations: [create, read, update, delete]}]) {
   id: ID!
   label: String
@@ -6,9 +14,24 @@ type Todo @model @auth(rules: [{allow: public, operations: [create, read, update
   Users: [User] @manyToMany(relationName: "TodoUser")
 }
 
-type User @model @auth(rules: [{allow: public}]) {
+type Jol @model @auth(rules: [{ allow: groups, groups: ["User"], operations: [create, read, update, delete] }]) {
   id: ID!
   name: String
-  email: String
-  todos: [Todo] @manyToMany(relationName: "TodoUser")
+  description: String
+  image: String
+  type: [JolType]
+  Users: [User] @manyToMany(relationName: "JolUser")
 }
+
+enum JolType {
+  HAVING_A_BRAAI
+  GOING_OUT
+  WINE_TASTING
+  GIN_TASTING
+  BEER_TASTING
+  COCKTAILS
+  DINE_OUT  
+  DINNER_PARTY
+}
+
+
