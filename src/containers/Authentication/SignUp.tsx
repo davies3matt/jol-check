@@ -1,8 +1,9 @@
-import { Input, Stack, Center, Heading, Icon, Button } from 'native-base';
+import { Input, Stack, Center, Heading, Icon, Button, Link } from 'native-base';
 import { MaterialIcons } from "@expo/vector-icons"
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-/** GrapgQL */
+import { Auth } from 'aws-amplify';
+import { formatPhoneNumber } from '../../utils/helpers';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,10 +17,34 @@ const styles = StyleSheet.create({
 interface Props {
     navigation: any;   
 }
+
+interface SignUpProps {
+    phoneNumber: string,
+    email: string,
+    password: string
+}
 const SignUp: React.FC<Props> = ({navigation}) => {
 
+    const handleSignUp = async (values: SignUpProps) => {
+        const { phoneNumber, email , password } = values;
+        try {
+            await Auth.signUp({
+                username: formatPhoneNumber(phoneNumber),
+                password: password,
+                attributes: {
+                    email: email.toLowerCase(),
+
+                }
+            });
+            navigation.navigate('VerifyCode', {username: phoneNumber});
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const [userDetails, setUserDetails] = React.useState({
-        username: '',
+        email: '',
+        phoneNumber: '',
         password: '',
         confirmPassword: '',
     });
@@ -41,10 +66,33 @@ const SignUp: React.FC<Props> = ({navigation}) => {
             <Input 
                 variant="rounded" 
                 size='2xl'
-                placeholder="Mobile Number" 
+                placeholder="Email" 
+                onChangeText={text => {
+                    setUserDetails({
+                    ...userDetails,
+                    email: text
+                })}}
                 InputLeftElement={
                     <Icon
-                        as={<MaterialIcons name="person" />}
+                        as={<MaterialIcons name="email" />}
+                        size={5}
+                        ml="2"
+                        color="muted.400"
+                    />
+                }       
+            />
+            <Input 
+                variant="rounded" 
+                size='2xl'
+                placeholder="Mobile Number" 
+                onChangeText={text => {
+                    setUserDetails({
+                    ...userDetails,
+                    phoneNumber: text
+                })}}
+                InputLeftElement={
+                    <Icon
+                        as={<MaterialIcons name="phone" />}
                         size={5}
                         ml="2"
                         color="muted.400"
@@ -55,6 +103,10 @@ const SignUp: React.FC<Props> = ({navigation}) => {
                 variant="rounded"
                 size='2xl'
                 placeholder='Password'
+                onChangeText={text => setUserDetails({
+                    ...userDetails,
+                    password: text
+                })}
                 type={visibility ? '' : 'password'}
                 InputLeftElement={
                     <Icon
@@ -101,9 +153,10 @@ const SignUp: React.FC<Props> = ({navigation}) => {
             />
             <Button
                 variant='subtle'
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => handleSignUp(userDetails)}
             >Sign Up</Button>
             </Stack>
+            <Link onPress={() => navigation.navigate('Login')} style={{marginTop: '5%'}}>Login</Link>
         </View>
     )
 }
