@@ -1,7 +1,10 @@
-import { Input, Stack, Center, Heading, Icon, Button, Link } from 'native-base';
+import { Input, Stack, Center, Heading, Icon, Button, Link, Image } from 'native-base';
 import { MaterialIcons } from "@expo/vector-icons"
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useAuthContext } from '../../context/AuthContext';
+import { formatPhoneNumber } from '../../utils/helpers';
+import SlideRightView from '../../components/SlideRightView';
 
 const styles = StyleSheet.create({
     container: {
@@ -17,13 +20,25 @@ interface Props {
 }
 const Login: React.FC<Props> = ({navigation}) => {
 
-    const [loginDetails, setLoginDetails] = React.useState({
+    const { signIn } = useAuthContext();
+
+    const [loginDetails, setLoginDetails] = React.useState<LoginDetails>({
         username: '',
         password: '',
     });
+    const { isAuthenticating } = useAuthContext();
+
+
+    interface LoginDetails {
+        username: string,
+        password: string
+    }
     const [visibility, setVisibility] = React.useState(false);
     return (
-        <View style={styles.container}>
+        <SlideRightView style={styles.container}>
+            <TouchableWithoutFeedback
+                onPress={() => Keyboard.dismiss()}
+            >
             <Stack
                 space={4}
                 w={{
@@ -31,6 +46,12 @@ const Login: React.FC<Props> = ({navigation}) => {
                     md: "25%",
                 }}
             >
+            <Image 
+                width={500}
+                height={100}
+                source={require('../../../assets/Images/jol-check.png')}
+                alt='jol-check-logo'
+            />
             <Center>
                 <Heading textAlign="center" mb="10">
                 Login
@@ -40,6 +61,10 @@ const Login: React.FC<Props> = ({navigation}) => {
                 variant="rounded" 
                 size='2xl'
                 placeholder="Mobile Number" 
+                onChangeText={text => setLoginDetails({
+                    ...loginDetails,
+                    username: text
+                })}
                 InputLeftElement={
                     <Icon
                         as={<MaterialIcons name="person" />}
@@ -53,6 +78,10 @@ const Login: React.FC<Props> = ({navigation}) => {
                 variant="rounded"
                 size='2xl'
                 placeholder='Password'
+                onChangeText={text => setLoginDetails({
+                    ...loginDetails,
+                    password: text
+                })}
                 type={visibility ? '' : 'password'}
                 InputLeftElement={
                     <Icon
@@ -75,11 +104,20 @@ const Login: React.FC<Props> = ({navigation}) => {
             />
             <Button
                 variant='subtle'
-                onPress={() => navigation.navigate('Home')}
+                onPress={async () => {
+                    signIn({
+                        username: formatPhoneNumber(loginDetails.username),
+                        password: loginDetails.password
+                    })
+                }}
+                isLoading={isAuthenticating}
+                isLoadingText='Submitting'
             >Login</Button>
             </Stack>
+            </TouchableWithoutFeedback>
             <Link onPress={() => navigation.navigate('SignUp')} style={{marginTop: '5%'}}>Create Account</Link>
-        </View>
+            <Link onPress={() => navigation.navigate('VerifyCode')} style={{marginTop: '5%'}}>Verify Account</Link>
+        </SlideRightView>
     )
 }
 
