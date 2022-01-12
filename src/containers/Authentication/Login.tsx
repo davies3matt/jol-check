@@ -18,21 +18,28 @@ const styles = StyleSheet.create({
 interface Props {
     navigation: any;   
 }
+interface LoginDetails {
+    username: string,
+    password: string
+}
 const Login: React.FC<Props> = ({navigation}) => {
 
     const { signIn } = useAuthContext();
-
     const [loginDetails, setLoginDetails] = React.useState<LoginDetails>({
         username: '',
         password: '',
     });
-    const { isAuthenticating } = useAuthContext();
+    const [isLoading, setIsLoading] = React.useState(false);
 
+    React.useEffect(() => {
+        if (isLoading) {
+            signIn(({
+                username: formatPhoneNumber(loginDetails.username),
+                password: loginDetails.password
+            }));
+        }
+    },[isLoading])
 
-    interface LoginDetails {
-        username: string,
-        password: string
-    }
     const [visibility, setVisibility] = React.useState(false);
     return (
         <SlideRightView style={styles.container}>
@@ -104,13 +111,8 @@ const Login: React.FC<Props> = ({navigation}) => {
             />
             <Button
                 variant='subtle'
-                onPress={async () => {
-                    signIn({
-                        username: formatPhoneNumber(loginDetails.username),
-                        password: loginDetails.password
-                    })
-                }}
-                isLoading={isAuthenticating}
+                onPress={() => setIsLoading(true)}
+                isLoading={isLoading}
                 isLoadingText='Submitting'
             >Login</Button>
             </Stack>
