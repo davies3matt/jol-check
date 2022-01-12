@@ -1,38 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
+import { ApolloProvider } from '@apollo/client';
 import React from 'react';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import Amplify from 'aws-amplify';
+import { NativeBaseProvider } from 'native-base';
 import awsconfig from './src/aws-exports';
-import { StyleSheet, View } from 'react-native';
-/** Graphql */
-import { createUser } from './src/graphql/mutations'
-import { listUsers } from './src/graphql/queries';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import client from './src/apollo';
+import AuthProvider from './src/context/AuthContext';
+import AppNavigation from './src/navigation';
 
 Amplify.configure(awsconfig);
 
-const myUser = { name: 'Matt', email: 'mdldavies@gmail.com' };
+const config = {
+  dependencies: {
+    'linear-gradient': require('expo-linear-gradient').LinearGradient
+  }
+}
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <button onClick={async () => {
-        await API.graphql(graphqlOperation(createUser, {input: myUser}))
-      }}>Click Me</button>
-      <button onClick={async () => {
-        const data = await API.graphql(graphqlOperation(listUsers));
-        console.log(data);
-      }}>Me Get!</button>
-      <StatusBar style="auto" />
-    </View>
+    // @ts-ignore
+    <ApolloProvider client={client}>
+        <NativeBaseProvider config={config}>
+        <AuthProvider>
+          <AppNavigation/>
+        </AuthProvider>
+        </NativeBaseProvider>
+    </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;

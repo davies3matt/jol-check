@@ -14,9 +14,9 @@ web-build/
 .DS_Store
 
 # Generated Files
-src/generated.ts
 src/models
 src/graphql
+src/generated
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
