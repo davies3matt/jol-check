@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import { Button } from 'native-base';
 import SlideRightView from '../../components/SlideRightView';
-import { View } from 'react-native';
 
 interface Props {
     navigation: any;
